@@ -123,6 +123,13 @@ int main()
 Result (your result may be a little different due to multi-threading):
 
 ```sh
+$ g++ --version
+g++ (Ubuntu 11.1.0-1ubuntu1~20.04) 11.1.0
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+$ g++ -std=c++20 -pthread -Wall -Wextra -Isrc test/main.cpp -o main
+$ ./main
 a_ordinary_function_return_nothing
 submit_raw_coroutine_handle
 a_coroutine_return_nothing
