@@ -1,26 +1,3 @@
-# coroutine-thread-pool.h
-Thread pool which supports c++20 coroutine. 一个支持c++20协程的线程池。
-
-# API
-```c++
-// Thread pool class
-jks::thread_pool;
-
-// Singleton to get thread pool
-jks::thread_pool::get();
-
-// Submit a task to thread pool
-jks::thread_pool.submit(std::invocable)
-
-// Return type of submit, which can be used to get task result
-jks::future<T>
-
-// Awaitbale class which submit coroutine to thread pool
-jks::thread_pool::awaitable
-```
-
-# Example
-```c++
 #include <iostream>
 #include <chrono>
 #include <string>
@@ -118,20 +95,3 @@ int main()
     // Tasks which are still in queue will not be executed
     // So above lambda example, Task 3 is not executed
 }
-```
-
-Result (your result may be a little different due to multi-threading):
-
-```sh
-a_ordinary_function_return_nothing
-submit_raw_coroutine_handle
-a_coroutine_return_nothing
-* Task 0+
-* Task 2+
-* Task 1+
-a_ordinary_function_return_string
-a_coroutine_return_string
-a_coroutine_return_string in a_function_calling_a_coroutine
-* Task * Task 02--
-* Task 1-
-```
