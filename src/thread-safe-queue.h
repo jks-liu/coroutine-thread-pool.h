@@ -14,10 +14,10 @@ struct thread_safe_queue
 {
     thread_safe_queue() {}
 
-    void put(T task)
+    void put(T e)
     {
         std::unique_lock<std::mutex> lk(m_m);
-        m_queue.emplace(task);
+        m_queue.emplace(e);
         m_cv.notify_one();
     }
 
@@ -35,10 +35,18 @@ struct thread_safe_queue
         return ret;
     }
 
-    void destroy()
+    std::queue<T>& destroy()
     {
+        // Even flag should under lock
+        // https://stackoverflow.com/a/38148447/4144109
+        std::unique_lock<std::mutex> _(m_m);
         m_must_return_nullptr.test_and_set();
         m_cv.notify_all();
+
+        // No element will be taken from the queue
+        // So we return the queue in case the caller need them
+        // WARNING: put may happen after this operation, caller should think about this
+        return m_queue;
     }
 
 private:

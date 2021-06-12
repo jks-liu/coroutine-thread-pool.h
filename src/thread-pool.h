@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <atomic>
 #include <concepts>
 #include <coroutine>
@@ -93,9 +94,15 @@ private:
 
     ~thread_pool()
     {
-        m_queue.destroy();
+        auto& q = m_queue.destroy();
         while (!m_threads.empty()) {
             m_threads.pop();
+        }
+        // Add threads are shutdowned here
+
+        while (!q.empty()) {
+            q.front().destroy();
+            q.pop();
         }
     }
 

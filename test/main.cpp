@@ -1,3 +1,10 @@
+#ifdef DEBUG_VALGRIND_
+#include <valgrind/drd.h>
+#define _GLIBCXX_SYNCHRONIZATION_HAPPENS_BEFORE(addr) ANNOTATE_HAPPENS_BEFORE(addr)
+#define _GLIBCXX_SYNCHRONIZATION_HAPPENS_AFTER(addr)  ANNOTATE_HAPPENS_AFTER(addr)
+#define _GLIBCXX_EXTERN_TEMPLATE -1
+#endif
+
 #include <iostream>
 #include <chrono>
 #include <string>
