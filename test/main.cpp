@@ -8,6 +8,7 @@
 #include <iostream>
 #include <chrono>
 #include <string>
+#include <syncstream>
 
 #include "thread-pool.h"
 
@@ -15,7 +16,7 @@ using namespace jks;
 
 void a_ordinary_function_return_nothing()
 {
-    std::cout << __func__ << std::endl;
+    std::osyncstream(std::cout) << __func__ << std::endl;
 }
 
 std::string a_ordinary_function_return_string()
@@ -26,7 +27,7 @@ std::string a_ordinary_function_return_string()
 future<void> a_coroutine_return_nothing()
 {
     co_await thread_pool::awaitable<void>();
-    std::cout << __func__ << std::endl;
+    std::osyncstream(std::cout) << __func__ << std::endl;
 }
 
 future<std::string> a_coroutine_return_string()
@@ -55,7 +56,7 @@ struct submit_awaitable: std::suspend_never
 future<void> submit_raw_coroutine_handle()
 {
     co_await submit_awaitable();
-    std::cout << __func__ << std::endl;
+    std::osyncstream(std::cout) << __func__ << std::endl;
 }
 
 int main()
@@ -85,18 +86,18 @@ int main()
     // Also support lambda
     for (int i=0; i<=n_pool; ++i) {
         tpool.submit([i]() -> int{
-            std::cout << "* Task " << i << '+' << std::endl;
+            std::osyncstream(std::cout) << "* Task " << i << '+' << std::endl;
             std::this_thread::sleep_for(3s);
-            std::cout << "* Task " << i << '-' << std::endl;
+            std::osyncstream(std::cout) << "* Task " << i << '-' << std::endl;
             return i;
         });
     }
     std::this_thread::sleep_for(1s);
 
 
-    std::cout << func_return_sth.get() << std::endl;
-    std::cout << coro_return_sth.get().get() << std::endl;
-    std::cout << func_calling_coro.get() << std::endl;
+    std::osyncstream(std::cout) << func_return_sth.get() << std::endl;
+    std::osyncstream(std::cout) << coro_return_sth.get().get() << std::endl;
+    std::osyncstream(std::cout) << func_calling_coro.get() << std::endl;
 
     // Destructor of thread_pool blocks until tasks current executing completed
     // Tasks which are still in queue will not be executed

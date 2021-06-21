@@ -142,3 +142,17 @@ a_coroutine_return_string in a_function_calling_a_coroutine
 * Task * Task 02--
 * Task 1-
 ```
+
+# Check memory leak
+
+```sh
+$ g++ -DDEBUG_VALGRIND_ -g -std=c++20 -pthread -Wall -Wextra -Isrc test/main.cpp -o main
+$ valgrind --tool=drd ./main
+```
+
+Or you can bus gcc builtin santitizer.
+
+```sh
+$ g++ -fsanitize=address -std=c++20 -pthread -Wall -Wextra -Isrc test/main.cpp -o main
+$ ./main
+```
