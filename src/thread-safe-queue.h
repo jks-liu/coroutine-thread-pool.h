@@ -54,7 +54,7 @@ private:
     std::mutex m_m;
     std::condition_variable m_cv;
 
-    std::atomic_flag m_must_return_nullptr=false;
+    std::atomic_flag m_must_return_nullptr;
 };
 
 } // namespace jks
