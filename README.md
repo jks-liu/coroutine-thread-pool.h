@@ -145,9 +145,11 @@ a_coroutine_return_string in a_function_calling_a_coroutine
 
 # Check memory leak
 
+[Valgrind](https://www.valgrind.org/docs/manual/index.html)
+
 ```sh
 $ g++ -DDEBUG_VALGRIND_ -g -std=c++20 -pthread -Wall -Wextra -Isrc test/main.cpp -o main
-$ valgrind --tool=drd ./main
+$ valgrind --tool=memcheck ./main
 ```
 
 Or you can bus gcc builtin santitizer.
