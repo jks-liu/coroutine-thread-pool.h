@@ -31,6 +31,10 @@ struct future: std::future<T>
     // Construct future object may after destruction of promise_type
     // So get furure before this time point
     future(std::future<T>&& f): std::future<T>(std::move(f)) {}
+
+#ifdef _MSC_VER
+    future() = default;
+#endif
 };
 
 
