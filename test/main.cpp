@@ -36,6 +36,12 @@ future<std::string> a_coroutine_return_string()
     h.promise().set_value(__func__);
 }
 
+future<std::string> a_coroutine_return_string_with_input(int x)
+{
+    auto h = co_await thread_pool::awaitable<std::string>();
+    h.promise().set_value(std::string(__func__) + ": " +  std::to_string(x));
+}
+
 
 std::string a_function_calling_a_coroutine()
 {
@@ -74,6 +80,9 @@ int main()
     // Coroutine
     tpool.submit(a_coroutine_return_nothing);
     auto coro_return_sth = tpool.submit(a_coroutine_return_string);
+    auto coro_return_sth_with_input = tpool.submit([](){
+        return a_coroutine_return_string_with_input(42);
+    });
 
     // Function calling coroutine
     auto func_calling_coro = tpool.submit(a_function_calling_a_coroutine);
@@ -97,6 +106,7 @@ int main()
 
     std::osyncstream(std::cout) << func_return_sth.get() << std::endl;
     std::osyncstream(std::cout) << coro_return_sth.get().get() << std::endl;
+    std::osyncstream(std::cout) << coro_return_sth_with_input.get().get() << std::endl;
     std::osyncstream(std::cout) << func_calling_coro.get() << std::endl;
 
     // Destructor of thread_pool blocks until tasks current executing completed
